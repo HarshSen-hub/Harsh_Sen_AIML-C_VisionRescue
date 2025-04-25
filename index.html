@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vision Rescue</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      background-image: linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+                        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top: 4px solid #38bdf8;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .neon-text {
+      color: #00f0ff;
+      text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff;
+    }
+
+    .neon-btn {
+      color: black;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+    }
+
+    .btn-green { background-color: #00ff9c; }
+    .btn-yellow { background-color: #ffe600; }
+    .btn-red { background-color: #ff0077; }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .case-card {
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      text-align: center;
+      color: white;
+      transition: 0.3s;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.05);
+    }
+
+    .case-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.25);
+    }
+
+    .case-photo {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0 auto 1rem auto;
+      border: 2px solid #00f0ff;
+      box-shadow: 0 0 10px #00f0ff;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #ff004c;
+      color: white;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      margin-top: 0.5rem;
+      box-shadow: 0 0 8px #ff004c;
+    }
+
+    .track-btn {
+      margin-top: 1rem;
+      padding: 0.4rem 1rem;
+      background: transparent;
+      color: #00f0ff;
+      border: 1px solid #00f0ff;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .track-btn:hover {
+      background: #00f0ff;
+      color: #000;
+      box-shadow: 0 0 10px #00f0ff;
+    }
+  </style>
+</head>
+
+<body class="text-white">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 w-full bg-gray-900 px-6 py-4 flex justify-between items-center z-50">
+    <h1 class="text-2xl font-bold">Vision Rescue</h1>
+    <ul id="nav-menu" class="hidden md:flex space-x-6">
+      <li><a href="#" class="hover:text-gray-400">Home</a></li>
+      <li><a href="#about" class="hover:text-gray-400">About</a></li>
+      <li><a href="#services" class="hover:text-gray-400">Services</a></li>
+      <li><a href="#contact" class="hover:text-gray-400">Contact</a></li>
+      <li><a href="#login-modal" class="hover:text-gray-400" onclick="toggleModal('login-modal')">Login</a></li>
+      <li><a href="#signup-modal" class="hover:text-gray-400" onclick="toggleModal('signup-modal')">Sign Up</a></li>
+    </ul>
+    <button class="md:hidden text-gray-400 focus:outline-none" onclick="toggleMenu()">☰</button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="h-screen flex flex-col justify-center items-center text-center px-6 pt-16 fade-in">
+    <h1 class="text-5xl font-extrabold mb-4">Find the Missing.</h1>
+    <p class="text-xl neon-text font-semibold mb-6">Harnessing the power of people and AI to track, trace, and reunite families across the nation.</p>
+    <div class="flex flex-col md:flex-row gap-4 mt-6">
+      <a href="report.html" class="px-6 py-3 neon-btn btn-green rounded-lg">Report Missing Person</a>
+      <a href="#search-person" class="px-6 py-3 neon-btn btn-yellow rounded-lg">Search Database</a>
+      <a href="#" class="px-6 py-3 neon-btn btn-red rounded-lg">Submit a Sighting</a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 px-6">
+    <h2 class="text-4xl font-bold text-center mb-10">How It Works</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="p-6 bg-gray-800 rounded-lg text-center">
+        <h3 class="text-xl font-semibold mb-2">Crowdsourced Investigations</h3>
+        <p class="text-gray-400">Using OSINT, volunteers help track missing persons.</p>
+      </div>
+      <div class="p-6 bg-gray-800 rounded-lg text-center">
+        <h3 class="text-xl font-semibold mb-2">Data-Driven Insights</h3>
+        <p class="text-gray-400">Leveraging AI & analytics to improve efficiency.</p>
+      </div>
+      <div class="p-6 bg-gray-800 rounded-lg text-center">
+        <h3 class="text-xl font-semibold mb-2">Global Impact</h3>
+        <p class="text-gray-400">Collaborating worldwide to solve real cases.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search -->
+  <section id="search-person" class="py-20 px-6 bg-gray-800 fade-in">
+    <h2 class="text-4xl font-bold text-center mb-10">Search for a Missing Person</h2>
+    <form id="search-form" class="max-w-lg mx-auto text-center">
+      <input type="text" id="search-name" placeholder="Enter name of missing person" class="w-full px-4 py-3 mb-4 rounded-lg text-black" required />
+      <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 rounded-lg text-white">Search</button>
+    </form>
+    <div id="search-loading" class="mt-4 hidden">
+      <div class="spinner"></div>
+    </div>
+    <div id="search-result" class="mt-6 text-center text-lg font-medium text-green-400"></div>
+  </section>
+
+  <!-- Recent Cases -->
+<section class="py-20 px-6">
+    <h2 class="text-4xl font-bold text-center mb-10">Recent Cases</h2>
+    <div class="cases-grid">
+      <!-- Tony Stark -->
+      <div class="case-card">
+        <img src="https://www.gettyimages.in/gi-resources/images/500px/983794168.jpg" alt="Tony Stark" class="case-photo" />
+        <h3 class="text-xl font-semibold mt-2">Tony Stark</h3>
+        <p class="text-gray-400">Age: 32</p>
+        <p class="text-gray-400">Last seen: San Francisco, CA</p>
+        <span class="status-badge">Missing</span>
+        <button class="track-btn">Track Case</button>
+      </div>
+  
+      <!-- Brent Faiyaz -->
+      <div class="case-card">
+        <img src="https://www.gettyimages.in/gi-resources/images/500px/983794168.jpg" alt="Brent Faiyaz" class="case-photo" />
+        <h3 class="text-xl font-semibold mt-2">Brent Faiyaz</h3>
+        <p class="text-gray-400">Age: 17</p>
+        <p class="text-gray-400">Last seen: Local Park, LA</p>
+        <span class="status-badge">Missing</span>
+        <button class="track-btn">Track Case</button>
+      </div>
+  
+      <!-- Frank Ocean -->
+      <div class="case-card">
+        <img src="https://www.gettyimages.in/gi-resources/images/500px/983794168.jpg" alt="Frank Ocean" class="case-photo" />
+        <h3 class="text-xl font-semibold mt-2">Frank Ocean</h3>
+        <p class="text-gray-400">Age: 9</p>
+        <p class="text-gray-400">Last seen: LA, California</p>
+        <span class="status-badge">Missing</span>
+        <button class="track-btn">Track Case</button>
+      </div>
+  
+      <!-- Lil Wayne -->
+      <div class="case-card">
+        <img src="https://www.gettyimages.in/gi-resources/images/500px/983794168.jpg" alt="Lil Wayne" class="case-photo" />
+        <h3 class="text-xl font-semibold mt-2">Lil Wayne</h3>
+        <p class="text-gray-400">Age: 24</p>
+        <p class="text-gray-400">Last seen: New York City</p>
+        <span class="status-badge">Missing</span>
+        <button class="track-btn">Track Case</button>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+
+  <!-- About -->
+  <section id="about" class="py-20 px-6 bg-gray-900 fade-in">
+    <h2 class="text-4xl font-bold text-center mb-8">About Us</h2>
+    <p class="max-w-3xl mx-auto text-center text-gray-300 text-lg">
+      Vision Rescue is a college project initiative focused on leveraging technology and collective effort to locate and reunite missing individuals.
+    </p>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="py-20 px-6 bg-gray-800 fade-in">
+    <h2 class="text-4xl font-bold text-center mb-8">Our Services</h2>
+    <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-center">
+      <div class="p-6 bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-2 text-cyan-400">Case Submission</h3>
+        <p class="text-gray-400">Submit a missing person report quickly with essential details.</p>
+      </div>
+      <div class="p-6 bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-2 text-cyan-400">Real-Time Search</h3>
+        <p class="text-gray-400">Search our growing database to find potential matches.</p>
+      </div>
+      <div class="p-6 bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-2 text-cyan-400">Community Sighting Tips</h3>
+        <p class="text-gray-400">Help the community by submitting anonymous sightings.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-20 px-6 bg-gray-900 fade-in">
+    <h2 class="text-4xl font-bold text-center mb-8">Contact Us</h2>
+    <div class="max-w-xl mx-auto text-center text-gray-300">
+      <p class="mb-4">📧 Email: visionrescue@example.com</p>
+      <p class="mb-4">📞 Phone: +1-234-567-890</p>
+      <p class="mb-4">📍 Location: College Campus, Gurgaon</p>
+      <p>Have feedback or want to join the mission? Reach out!</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 bg-gray-900 text-center">
+    <p class="text-gray-400">© 2025 Vision Rescue. All rights reserved.</p>
+    <div class="mt-2 space-x-4">
+      <a href="#" class="text-gray-400 hover:text-white">Twitter</a>
+      <a href="#" class="text-gray-400 hover:text-white">Instagram</a>
+      <a href="#" class="text-gray-400 hover:text-white">LinkedIn</a>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden">
+    <div class="flex justify-center items-center min-h-screen">
+      <div class="bg-gray-800 rounded-lg p-8 w-96">
+        <h2 class="text-xl font-semibold text-center text-white mb-4">Login</h2>
+        <form id="login-form">
+          <input type="email" class="w-full px-4 py-2 mb-4 rounded-lg text-black" placeholder="Email" required />
+          <input type="password" class="w-full px-4 py-2 mb-4 rounded-lg text-black" placeholder="Password" required />
+          <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white">Login</button>
+        </form>
+        <button class="mt-4 text-blue-500 hover:underline" onclick="toggleModal('login-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signup-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden">
+    <div class="flex justify-center items-center min-h-screen">
+      <div class="bg-gray-800 rounded-lg p-8 w-96">
+        <h2 class="text-xl font-semibold text-center text-white mb-4">Sign Up</h2>
+        <form id="signup-form">
+          <input type="email" class="w-full px-4 py-2 mb-4 rounded-lg text-black" placeholder="Email" required />
+          <input type="password" class="w-full px-4 py-2 mb-4 rounded-lg text-black" placeholder="Password" required />
+          <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white">Sign Up</button>
+        </form>
+        <button class="mt-4 text-blue-500 hover:underline" onclick="toggleModal('signup-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleModal(id) {
+      document.getElementById(id).classList.toggle('hidden');
+    }
+
+    function toggleMenu() {
+      const nav = document.getElementById("nav-menu");
+      nav.classList.toggle("hidden");
+    }
+
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.fade-in').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          el.classList.add('visible');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
